@@ -1,0 +1,23 @@
+# Maven
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.settings/
+.classpath
+.project
+
+# Lombok
+*.lombok
+
+# Mac OS
+.DS_Store
+
+# Allison 1875
+*.bak
+
+# Log
+*.log

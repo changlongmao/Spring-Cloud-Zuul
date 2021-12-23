@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: zuul #各服务只需修改此服务名配置，其他配置不用变更，也不建议变更
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        #服务需动态刷新的配置，如开关、阀值等，如没有，可以不配置
+        #如需配置，请在配置中心添加，完整配置文件名为admin-refreshable.yml(例)
+        name: ${spring.application.name}-refreshable
+        file-extension: yml
+        shared-configs[0]:
+          #系统整体公共的配置，不可动态刷新，与环境、服务都无关，架构统一配置，各服务无需配置
+          data-id: common.yml
+          group: common
+        shared-configs[1]:
+          #公共的中间件配置，不可动态刷新，与环境有关，服务无关，如mq、redis、注册中心、xxl-job等，日志等级也在此配置
+          #运维统一配置，各服务无需配置
+          data-id: shared-midware.yml
+          group: common
+        extension-configs[0]:
+          #与环境无关，各服务固定的配置，不可动态刷新，如服务端口、job端口、ID生成器编号等
+          #可配置一份，其他环境直接copy，请在配置中心添加，完整配置文件名为admin-fixed.yml(例)
+          data-id: ${spring.application.name}-fixed.yml
+
+#不同环境只需不同的配置中心地址，无其他额外配置，故采用单文件多文档块配置
+#注意不要删了分割符“---”
+
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      config:
+        namespace: bde03597-b1af-4d7d-b3f5-66449bfbec44
+        server-addr: 1.15.104.25:8848
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      config:
+        namespace: 0df90831-fc8e-4020-9ba3-a05014939ad5
+        server-addr: 1.15.104.25:8848
